@@ -38,8 +38,47 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
   void _onSearchChanged(String value) => setState(() => _query = value);
   void _onCategoriaChanged(String categoria) =>
       setState(() => _categoriaSeleccionada = categoria);
-  void _onSenaSelected(SignModel sign) =>
-      setState(() => _senaSeleccionada = sign);
+  void _onSenaSelected(SignModel sign) {
+    setState(() => _senaSeleccionada = sign);
+
+    // Si la pantalla es pequeña (móvil), mostramos el visor en un BottomSheet
+    final isWide = MediaQuery.of(context).size.width >= 700;
+    if (!isWide) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.85,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF0F0F1E) : const Color(0xFFEEF0FF),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            child: Column(
+              children: [
+                // Indicador de arrastre (Handle)
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  width: 40,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                Expanded(
+                  child: SignViewerPanel(senaSeleccionada: sign),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -71,12 +110,9 @@ class _VocabularyScreenState extends State<VocabularyScreen> {
               ],
             );
           } else {
-            return Column(
-              children: [
-                Expanded(flex: 5, child: _buildListPanel()),
-                Expanded(flex: 5, child: _buildViewerPanel()),
-              ],
-            );
+            // En móvil, la lista ocupa toda la pantalla.
+            // El visor se abre en el BottomSheet (ver _onSenaSelected).
+            return _buildListPanel();
           }
         },
       ),
