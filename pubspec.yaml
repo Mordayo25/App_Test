@@ -1,0 +1,37 @@
+name: sign_language_app
+description: "Aplicación móvil para el aprendizaje de Lengua de Señas Peruana (LSP)"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+  shared_preferences: ^2.5.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  # Registra la carpeta de imágenes de señas y del placeholder.
+  # Flutter incluirá automáticamente todos los archivos dentro de estas carpetas.
+  assets:
+    - assets/images/
+    - assets/placeholder/
+    - assets/google_fonts/
+flutter_launcher_icons:
+  image_path: "assets/images/logo.jpg"
+  ios: true
+  windows:
+    generate: true
+    icon_size: 256
